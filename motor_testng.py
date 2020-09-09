@@ -77,7 +77,7 @@ def init():
 # init()
 flag = 0
 while True:
-
+    flag += 1
     GPIO.output(DIR, GPIO.HIGH)
     GPIO.output(PLS, GPIO.HIGH)
     time.sleep(delay)
