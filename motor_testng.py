@@ -26,23 +26,6 @@ def turnOff(num):
         GPIO.output(ENA, GPIO.LOW)
 
 
-def goFoward():
-    #global nowPlaying
-    #global wasPlaying
-    #wasPlaying = 0
-    GPIO.output(m1, GPIO.LOW)
-    GPIO.output(m2, GPIO.LOW)
-    r_btn = GPIO.input(23)
-    time.sleep(2)
-    while(r_btn == 0):
-        GPIO.output(m1, GPIO.HIGH)
-        GPIO.output(m2, GPIO.LOW)
-        time.sleep(0.1)
-        r_btn = GPIO.input(23)
-    GPIO.output(m1, GPIO.LOW)
-    GPIO.output(m2, GPIO.LOW)
-
-
 # Variable initialized
 currentAngle = 0
 nowPlaying = 0
@@ -69,10 +52,6 @@ GPIO.output(ENA, GPIO.HIGH)
 time.sleep(0.001)
 GPIO.output(ENA, GPIO.LOW)
 GPIO.output(ENA, GPIO.LOW)
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(m1, GPIO.OUT)
-GPIO.setup(m2, GPIO.OUT)
 print("initialized")
 
 ######## Main ##########
@@ -85,16 +64,11 @@ def init():
     while(btnR == 0 or btnL == 0):
         print(str(btnL) + '\t' + str(btnR))
         GPIO.output(DIR, GPIO.HIGH)
-        if btnL == 0:
-            GPIO.output(PLSL, GPIO.HIGH)
-        if btnR == 0:
-            GPIO.output(PLSR, GPIO.HIGH)
+        GPIO.output(PLS, GPIO.HIGH)
         time.sleep(delay)
-        if btnL == 0:
-            GPIO.output(PLSL, GPIO.LOW)
-        if btnR == 0:
-            GPIO.output(PLSR, GPIO.LOW)
+        GPIO.output(PLS, GPIO.LOW)
         time.sleep(delay)
+
         btnL = GPIO.input(sensorL)
         btnR = GPIO.input(sensorR)
     currentAngle = 0
@@ -103,14 +77,14 @@ def init():
 # init()
 flag = 0
 while True:
-    println("Runtime")
 
     GPIO.output(DIR, GPIO.HIGH)
     GPIO.output(PLS, GPIO.HIGH)
     time.sleep(delay)
     GPIO.output(PLS, GPIO.LOW)
     time.sleep(delay)
-    if flag%3==0:
-        time.sleep(1)
+    if flag%400==0:
+        println("One Cycle stop for 0.5 sec")
+        time.sleep(0.5)
 
 GPIO.cleanup()
