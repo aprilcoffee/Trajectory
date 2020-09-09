@@ -84,7 +84,7 @@ while True:
     GPIO.output(PLS, GPIO.LOW)
     time.sleep(delay)
     if flag%400==0:
-        println("One Cycle stop for 0.5 sec")
+        print("One Cycle stop for 0.5 sec")
         time.sleep(0.5)
 
 GPIO.cleanup()
