@@ -74,6 +74,35 @@ def init():
     currentAngle = 0
 
 
+
+def foward():
+    global currentAngle
+    btn = GPIO.input(switch_limit)
+    while(btn == 0):
+        GPIO.output(DIR,GPIO.LOW)
+
+        GPIO.output(PLSL,GPIO.HIGH)
+        time.sleep(delay)
+        GPIO.output(PLSL,GPIO.LOW)
+        time.sleep(delay)
+
+        btn = GPIO.input(switch_limit)
+    currentAngle += 1
+
+def return():
+    global currentAngle
+    btn = GPIO.input(switch_return)
+    while(btn == 0):
+        GPIO.output(DIR,GPIO.HIGH)
+
+        GPIO.output(PLS,GPIO.HIGH)
+        time.sleep(delay)
+        GPIO.output(PLS,GPIO.LOW)
+        time.sleep(delay)
+
+        btn = GPIO.input(switch_return)
+    currentAngle += 1
+
 # init()
 flag = 0
 while True:
@@ -83,7 +112,7 @@ while True:
     time.sleep(delay)
     GPIO.output(PLS, GPIO.LOW)
     time.sleep(delay)
-    if flag%400==0:
+    if flag%500==0:
         print("One Cycle stop for 0.5 sec")
         time.sleep(0.5)
 
