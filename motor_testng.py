@@ -17,23 +17,15 @@ switch_return = 23
 switch_limit = 24
 
 
-# Function Setup
-def turnOff(num):
-    print("Released Motor")
-    if(num == 0):
-        GPIO.output(ENA, GPIO.HIGH)
-    elif(num == 1):
-        GPIO.output(ENA, GPIO.LOW)
-
 
 # Variable initialized
-currentAngle = 0
+currentPosition = 0
 nowPlaying = 0
 wasPlaying = 0
+turn_limit = 200 #limitation of the moving Motor
 
 # stepMotor
-delay = 0.01
-
+delay = 0.01 # *2 = delay of steps
 
 ######## Setup ##########
 
@@ -54,7 +46,13 @@ GPIO.output(ENA, GPIO.LOW)
 GPIO.output(ENA, GPIO.LOW)
 print("initialized")
 
-######## Main ##########
+# Function Setup
+def turnOff(num):
+    print("Released Motor")
+    if(num == 0):
+        GPIO.output(ENA, GPIO.HIGH)
+    elif(num == 1):
+        GPIO.output(ENA, GPIO.LOW)
 
 
 def init():
@@ -71,49 +69,80 @@ def init():
 
         btnL = GPIO.input(sensorL)
         btnR = GPIO.input(sensorR)
-    currentAngle = 0
-
+    currentPosition = 0
 
 
 def foward():
     global currentAngle
     btn = GPIO.input(switch_limit)
-    while(btn == 0):
+    while(btn == 0 or currentPosition == turn_limit):
+        currentPosition += 1
         GPIO.output(DIR,GPIO.LOW)
-
-        GPIO.output(PLSL,GPIO.HIGH)
-        time.sleep(delay)
-        GPIO.output(PLSL,GPIO.LOW)
-        time.sleep(delay)
-
-        btn = GPIO.input(switch_limit)
-    currentAngle += 1
-
-def return():
-    global currentAngle
-    btn = GPIO.input(switch_return)
-    while(btn == 0):
-        GPIO.output(DIR,GPIO.HIGH)
-
         GPIO.output(PLS,GPIO.HIGH)
         time.sleep(delay)
         GPIO.output(PLS,GPIO.LOW)
         time.sleep(delay)
 
-        btn = GPIO.input(switch_return)
-    currentAngle += 1
+        btn = GPIO.input(switch_limit)
 
-# init()
-flag = 0
+######## Main ##########
+
+
+init()
+currentPosition = 0
+
+# proc1 = subprocess.Popen(
+#     args=['
+#     omxplayer',
+#     '--no-osd',
+#     '--loop',
+#     '-b',
+#     '--layer','1',
+#     '--aspect-mode', 'fill',
+#      'tomotor2.mp4'])
+
+print 'proc\'s pid = ', proc1.pid
+
+
 while True:
-    flag += 1
-    GPIO.output(DIR, GPIO.HIGH)
-    GPIO.output(PLS, GPIO.HIGH)
-    time.sleep(delay)
-    GPIO.output(PLS, GPIO.LOW)
-    time.sleep(delay)
-    if flag%500==0:
-        print("One Cycle stop for 0.5 sec")
-        time.sleep(0.5)
+    foward();
+
+    # proc2 = subprocess.Popen(
+    #     args=['
+    #     omxplayer',
+    #     '--no-osd',
+    #     '--loop',
+    #     '-b',
+    #     '--layer','2',
+    #     '--aspect-mode', 'fill',
+    #      'tomotor2.mp4'])
+    # time.sleep(0.5)
+    # subprocess.call(['pkill', '-P', str(proc1.pid)])
+
+
+    init();
+    # proc1 = subprocess.Popen(
+    #     args=['
+    #     omxplayer',
+    #     '--no-osd',
+    #     '--loop',
+    #     '-b',
+    #     '--layer','1',
+    #     '--aspect-mode', 'fill',
+    #      'tomotor2.mp4'])
+    # time.sleep(0.5)
+    # subprocess.call(['pkill', '-P', str(proc2.pid)])
+
+
+    # flag += 1
+    # GPIO.output(DIR, GPIO.HIGH)
+    # GPIO.output(PLS, GPIO.HIGH)
+    # time.sleep(delay)
+    # GPIO.output(PLS, GPIO.LOW)
+    # time.sleep(delay)
+    # if flag%500==0:
+    #     print("One Cycle stop for 0.5 sec")
+    #     time.sleep(0.5)
+
 
 GPIO.cleanup()
