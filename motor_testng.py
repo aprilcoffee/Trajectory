@@ -67,8 +67,8 @@ def init():
         GPIO.output(PLS, GPIO.LOW)
         time.sleep(delay)
 
-        btnL = GPIO.input(sensorL)
-        btnR = GPIO.input(sensorR)
+        btnL = GPIO.input(switch_limit)
+        btnR = GPIO.input(switch_return)
     currentPosition = 0
 
 
