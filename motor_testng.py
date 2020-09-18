@@ -59,7 +59,7 @@ def init():
     global currentAngle
     btnR = GPIO.input(switch_return)
     btnL = GPIO.input(switch_limit)
-    while(btnR == 0 or btnL == 0):
+    while(btnR == 0):
         print(str(btnL) + '\t' + str(btnR))
         GPIO.output(DIR, GPIO.HIGH)
         GPIO.output(PLS, GPIO.HIGH)
@@ -76,7 +76,7 @@ def foward():
     global currentAngle
     btn = GPIO.input(switch_limit)
     while(btn == 0 or currentPosition == turn_limit):
-        currentPosition += 1
+        #currentPosition += 1
         GPIO.output(DIR,GPIO.LOW)
         GPIO.output(PLS,GPIO.HIGH)
         time.sleep(delay)
