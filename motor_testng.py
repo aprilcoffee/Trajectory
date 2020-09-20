@@ -25,7 +25,7 @@ wasPlaying = 0
 turn_limit = 200 #limitation of the moving Motor
 
 # stepMotor
-delay = 0.01 # *2 = delay of steps
+delay = 0.001 # *2 = delay of steps
 
 ######## Setup ##########
 
@@ -75,7 +75,7 @@ def init():
 def foward():
     global currentAngle
     btn = GPIO.input(switch_limit)
-    while(btn == 0 or currentPosition == turn_limit):
+    while(btn == 0):# or currentPosition == turn_limit):
         #currentPosition += 1
         GPIO.output(DIR,GPIO.LOW)
         GPIO.output(PLS,GPIO.HIGH)
@@ -101,11 +101,13 @@ currentPosition = 0
 #     '--aspect-mode', 'fill',
 #      'tomotor2.mp4'])
 
-print 'proc\'s pid = ', proc1.pid
+#print 'proc\'s pid = ', proc1.pid
 
 
 while True:
+    print("turn")
     foward();
+    print("home")
 
     # proc2 = subprocess.Popen(
     #     args=['
