@@ -22,7 +22,8 @@ switch_limit = 24
 currentPosition = 0
 nowPlaying = 0
 wasPlaying = 0
-turn_limit = 13500 #limitation of the moving Motor
+runSecond = 30  #limitation of the moving Motor
+turn_limit = runSecond*450
 
 # stepMotor
 delay = 0.001 # *2 = delay of steps
