@@ -22,7 +22,7 @@ switch_limit = 24
 currentPosition = 0
 nowPlaying = 0
 wasPlaying = 0
-turn_limit = 200 #limitation of the moving Motor
+turn_limit = 13500 #limitation of the moving Motor
 
 # stepMotor
 delay = 0.001 # *2 = delay of steps
@@ -56,11 +56,11 @@ def turnOff(num):
 
 
 def init():
-    global currentAngle
+    global currentPosition
     btnR = GPIO.input(switch_return)
     btnL = GPIO.input(switch_limit)
     while(btnR == 0):
-        print(str(btnL) + '\t' + str(btnR))
+        #print(str(btnL) + '\t' + str(btnR))
         GPIO.output(DIR, GPIO.HIGH)
         GPIO.output(PLS, GPIO.HIGH)
         time.sleep(delay)
@@ -73,10 +73,11 @@ def init():
 
 
 def foward():
-    global currentAngle
+    global currentPosition
+    global turn_limit
     btn = GPIO.input(switch_limit)
-    while(btn == 0):# or currentPosition == turn_limit):
-        #currentPosition += 1
+    while(btn == 0 and currentPosition <= turn_limit):
+        currentPosition = currentPosition+1
         GPIO.output(DIR,GPIO.LOW)
         GPIO.output(PLS,GPIO.HIGH)
         time.sleep(delay)
@@ -91,15 +92,9 @@ def foward():
 init()
 currentPosition = 0
 
-# proc1 = subprocess.Popen(
-#     args=['
-#     omxplayer',
-#     '--no-osd',
-#     '--loop',
-#     '-b',
-#     '--layer','1',
-#     '--aspect-mode', 'fill',
-#      'tomotor2.mp4'])
+proc1 = subprocess.Popen(args=['omxplayer','--no-osd','--loop','-b','--layer','1','--aspect-mode','fill','/home/pi/Desktop/Trajectory/go_and_back.mp4'])
+time.sleep(2)
+
 
 #print 'proc\'s pid = ', proc1.pid
 
@@ -109,31 +104,16 @@ while True:
     foward();
     print("home")
 
-    # proc2 = subprocess.Popen(
-    #     args=['
-    #     omxplayer',
-    #     '--no-osd',
-    #     '--loop',
-    #     '-b',
-    #     '--layer','2',
-    #     '--aspect-mode', 'fill',
-    #      'tomotor2.mp4'])
-    # time.sleep(0.5)
-    # subprocess.call(['pkill', '-P', str(proc1.pid)])
-
+    #proc2 = subprocess.Popen(args=['omxplayer','--no-osd','--loop','-b','--layer','2','--aspect-mode', 'fill','/home/pi/Desktop/Trajectory/go_home.mp4'])
+    #time.sleep(0.5)
+    #subprocess.call(['pkill', '-P', str(proc1.pid)])
 
     init();
-    # proc1 = subprocess.Popen(
-    #     args=['
-    #     omxplayer',
-    #     '--no-osd',
-    #     '--loop',
-    #     '-b',
-    #     '--layer','1',
-    #     '--aspect-mode', 'fill',
-    #      'tomotor2.mp4'])
-    # time.sleep(0.5)
-    # subprocess.call(['pkill', '-P', str(proc2.pid)])
+    currentPosition=0
+    subprocess.call(['pkill','-P',str(proc1.pid)])
+    proc1 = subprocess.Popen(args=['omxplayer','--no-osd','--loop','-b','--layer','1','--aspect-mode', 'fill','/home/pi/Desktop/Trajectory/go_and_back.mp4'])
+    time.sleep(2)
+    #subprocess.call(['pkill', '-P', str(proc2.pid)])
 
 
     # flag += 1
